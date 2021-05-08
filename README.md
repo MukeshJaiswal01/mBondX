@@ -1,1 +1,1 @@
-# mBondX.
+# mBondX - buy & sell bonds
