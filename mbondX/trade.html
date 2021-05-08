@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html>
+ <head>
+    <meta charset="UTF-8"> 
+     <link rel="stylesheet" href="trade.css">
+ </head>
+  <body>
+    <h1>mbondX</h1>
+    <h2 class="h21">Sell & Buy Bond</h2>
+      <div class="container">
+         
+        <div class="buy">
+            <h2 class="h22">Buy</h2>
+             <br>
+             <input type="number" placeholder="enter the price">
+             <br>
+             <br>
+             <input type="number" placeholder="no of bonds ">
+             <br>
+             <br>
+             <button id="b1">Buy</button>
+        </div>
+        <div class="sell">
+            <h2 class="h22">Sell</h2>
+             <br>
+             <input type="number" placeholder="enter the price">
+             <br>
+             <br>
+             <input type="number" placeholder="no of bonds ">
+             <br>
+             <br>
+             <button id="b2">Sell</button>
+        </div>
+        </div>
+
+        <script src="https://unpkg.com/web3@latest/dist/web3.min.js"></script> 
+       <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"  crossorigin="anonymous"></script>
+
+       <script>
+
+window.addEventListener('load', async () => {
+        if (window.ethereum) {
+           window.web3 = new Web3(window.ethereum);
+            try {
+        // Request account access if needed
+                  await window.ethereum.enable();
+           // Acccounts now exposed
+          } catch (error) {
+        // User denied account access...
+          console.log(error);
+          }
+         }
+             // Legacy dapp browsers...
+        else if (window.web3) {
+               window.web3 = new Web3(web3.currentProvider);
+                    // Acccounts always exposed
+
+                   }
+               // Non-dapp browsers...
+               else {
+              console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
+               }
+
+
+
+             const abi = [
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "_cancelled",
+				"type": "address"
+			}
+		],
+		"name": "cancelled",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "maker",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "price",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "number",
+				"type": "uint256"
+			}
+		],
+		"name": "offer_made",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "maker",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "taker",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "number",
+				"type": "uint256"
+			}
+		],
+		"name": "taker",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "no_of_bond",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "price",
+				"type": "uint256"
+			}
+		],
+		"name": "buy",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "Id",
+				"type": "uint256"
+			}
+		],
+		"name": "cancel",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "price",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_no_of_bonds",
+				"type": "uint256"
+			}
+		],
+		"name": "offer",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "_bonds",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "no_of_bond",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "maturity_date",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "couponRate",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "Principal",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "lastOwner",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "B_id",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "no_of_bond",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "maturity_date",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "couponRate",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "Principal",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "lastOwner",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "balance",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "coupon_receiving_address",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "last_offer_id",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "offers",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "buyer",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "Pay_amt",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "no_of_bond",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "time",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "sortList",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "price",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "_maker",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+] ;
+             const adr = "0x77e59b30EC73D23D535D81fD78c0Fd9054fb9ee6";  
+             const contract =  new web3.eth.Contract(abi, adr);
+             const account =  await web3.eth.getAccounts();
+              
+        $("#b1").click( async function(){
+
+            const buy = await contract.methods.buy(10, 10000 ).send(
+                                                                    {from:account[0], value: 10000 } )
+
+            if(buy){
+                alert("bought successfully")
+            }
+
+
+
+        })
+
+        $("#b2").click( async function(){
+             
+            const offer = await contract.methods.offer(1000, 10 ).send(
+                                                                    {from:account[0]} )
+
+             if(offer){
+
+                alert("offer made successfully");
+             }
+
+        })
+
+
+
+            })
+       </script>
+
+
+
+      </div>
+  </body>
+</html>
