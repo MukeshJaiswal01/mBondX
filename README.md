@@ -22,7 +22,7 @@
 <img src ="https://siasky.net/_A3v5fQ8_RFjGwzRO-1Yk8mMVE5n1D3P2fH_uKsjdOIWfQ">
 
 <br>
-<p> user can  upload these indenture document to ipfs</p>
+<p> user can  upload these indenture document to ipfs to make it more accessible</p>
 <br>
 <img src = "https://siasky.net/_BmI4r2eQLQJA-MHaTvpM_LRn_6JFgDsKg9UQB9lnHMbag">
 
