@@ -1,6 +1,8 @@
 pragma solidity 0.8.0;
 
-contract MbondX{
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC721/ERC721.sol"
+
+contract MbondX is ERC721("Mbond", "mbond"){
     
     
       struct OfferInfo{
@@ -130,7 +132,7 @@ contract MbondX{
            
            coupon_receiving_address.push(msg.sender);
            
-           }
+            mint( msg.sender, id);
            
         /// sort()
         
