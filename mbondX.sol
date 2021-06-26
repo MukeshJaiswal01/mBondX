@@ -1,6 +1,7 @@
 pragma solidity 0.8.0;
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC721/ERC721.sol"
+import "interface/zBond.sol"
 
 contract MbondX is ERC721("Mbond", "mbond"){
     
@@ -139,6 +140,8 @@ contract MbondX is ERC721("Mbond", "mbond"){
          emit taker(oldOwner, msg.sender, no_of_bond );
         
      }
+     
+     function IssueZerocoupon_bond(){}
     
     function balance () external view returns(uint){
         
